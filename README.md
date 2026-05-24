@@ -1,0 +1,197 @@
+<div align="center">
+
+# Better Phrase
+
+**Polish your English phrasing, baked into Claude Code.**
+
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+**English** · [中文](README.zh-CN.md)
+
+</div>
+
+---
+
+## What it looks like
+
+When you write English:
+
+> ✏️ **English tip:**
+> - "I very like" → "I really like" — *very* 不能直接修饰动词。
+> - "open the light" → "turn on the light" — 开灯用 *turn on*。
+>
+> ✍️ **Better version:** "I really like coding with Claude — turn on the lights, start typing, and it just works."
+
+When you write Chinese:
+
+> 🌐 **English:**
+> "I'd like to schedule a meeting with the client next Tuesday to go over the contract details."
+
+When you write code, commands, or pure Chinese without translation need — **nothing**. Zero tokens, zero noise.
+
+## What is this?
+
+Better Phrase is a Claude Code add-on that:
+- catches grammar and idiom issues in your **English** prompts,
+- prepends an idiomatic English version when you write in **Chinese**,
+- and stays completely silent for everything else.
+
+Useful for anyone writing English daily — PR descriptions, client emails, technical docs, Slack messages.
+
+## Why not just put rules in CLAUDE.md?
+
+| | Rules in CLAUDE.md | Better Phrase |
+|---|---|---|
+| Token cost | **Every** prompt loads ~400 tokens of rules | Only when **actually triggered** |
+| Trigger reliability | LLM judges (might forget or false-positive) | Deterministic, 100% consistent |
+| Pure Chinese / code prompts | Still cost tokens | **Zero** cost, completely silent |
+
+**Result: 5–10× less token spend over a working day, more reliable triggering.**
+
+The core thesis: **boolean decisions belong in code, not in the LLM**. The LLM should generate corrections — not decide whether to generate them.
+
+## Features
+
+- ✏️ **English polish** — grammar, word choice, idiom fixes + native-style rewrite
+- 🌐 **Chinese → English translation** — idiomatic English version of what you said (toggleable)
+- 🎯 **Zero noise** — code, commands, and irrelevant inputs trigger nothing
+- 🇨🇳 **Chinese explanations** — tips are explained in Chinese, focused on common 中式英语 patterns
+- 🚀 **Imperceptible overhead** — far faster than Claude's own response latency
+- 🔒 **100% local** — no API calls, no telemetry, no data leaves your machine
+
+## Requirements
+
+- [Claude Code](https://docs.claude.com/en/docs/claude-code) installed and working
+- **Python 3.9+** (pre-installed on macOS and most Linux distros)
+- **jq** — only needed if you use the bundled installer (it edits `~/.claude/settings.json` safely)
+  - macOS: `brew install jq`
+  - Linux: `sudo apt install jq` (or your distro's equivalent)
+
+## Installation
+
+You have two ways to install — pick whichever matches your workflow. Both end up registering the same `UserPromptSubmit` hook with Claude Code.
+
+### Option A — via skills.sh (recommended)
+
+```bash
+npx skills add roseduan/better-phrase
+```
+
+This pulls the skill into Claude Code's skill registry and wires up the hook automatically. Best if you already use `skills.sh` to manage other skills.
+
+### Option B — via the bundled installer
+
+Clone the repo somewhere permanent (the installer points Claude Code at the local script — don't delete the folder after).
+
+```bash
+git clone https://github.com/roseduan/better-phrase.git ~/.claude/skills/better-phrase
+cd ~/.claude/skills/better-phrase
+./install.sh
+```
+
+What the installer does:
+
+1. Checks that `~/.claude/` exists and that `python3` / `jq` are installed
+2. Backs up your existing `~/.claude/settings.json` (timestamped backup)
+3. Adds a `UserPromptSubmit` hook entry pointing at `better-phrase.sh` in the cloned folder
+4. Cleans up any previous Better Phrase entries from earlier installs
+
+### Verify it works
+
+1. Restart Claude Code (or open a new session) so it picks up the updated settings
+2. Type any English sentence into Claude Code, e.g. `how are you today`
+3. You should see an `✏️ English tip` block appear before the actual answer
+
+If nothing appears, check that `~/.claude/settings.json` contains an entry under `hooks.UserPromptSubmit` pointing at `better-phrase.sh`.
+
+### Uninstall
+
+- Installed via `npx skills add` → `npx skills remove better-phrase`
+- Installed via `./install.sh` → from the repo folder, run `./uninstall.sh`
+
+The uninstaller removes the hook entry from `~/.claude/settings.json` and restores from backup if needed. Your installed folder stays put — delete it manually if you no longer want it.
+
+## Configuration
+
+There's exactly **one** user-facing toggle: whether Chinese → English translation is on.
+
+English polish is the product's core value — it's always on. To disable everything, run `./uninstall.sh`.
+
+```bash
+# From the repo root:
+PYTHONPATH=. python3 -m better_phrase translate           # show current state
+PYTHONPATH=. python3 -m better_phrase translate off       # disable
+PYTHONPATH=. python3 -m better_phrase translate on        # re-enable
+```
+
+### Overhead timing display
+
+Every BP block ends with a small footer showing the time spent in the hook step:
+
+```
+*(⏱ Better Phrase: 21ms hook)*
+```
+
+Toggle it any time:
+
+```bash
+PYTHONPATH=. python3 -m better_phrase timing              # show state
+PYTHONPATH=. python3 -m better_phrase timing off          # hide the footer
+PYTHONPATH=. python3 -m better_phrase timing on           # re-enable
+```
+
+### Behavior matrix
+
+| Input | `translate=on` (default) | `translate=off` |
+|-------|--------------------------|-----------------|
+| English | ✏️ English tip | ✏️ English tip |
+| Chinese | 🌐 English version | (silent) |
+| Mixed, Chinese-dominant | 🌐 English version | Polish if enough English, else silent |
+| Mixed, English-dominant | ✏️ English tip | ✏️ English tip |
+| Code / commands | (silent) | (silent) |
+
+## Known limitations
+
+Better Phrase sees the assembled prompt *after* it leaves your keyboard. **It cannot distinguish what you typed from what you pasted** — Claude Code doesn't pass paste metadata.
+
+To compensate:
+
+- **Tail-only heuristic.** When the trailing segment of your input is much shorter than the body (≤ 50 chars vs ≥ 100 chars body), Better Phrase analyzes only that trailing segment. This catches the common "pasted content + short typed question" pattern automatically.
+- **Skip-anything mechanism.** Wrap any content in triple backticks to exclude it from detection entirely:
+
+      ```
+      <anything you pasted that you don't want analyzed>
+      ```
+
+      your actual question
+
+  Fenced blocks are stripped before any language detection runs.
+
+The combination handles the common cases (~90%). For perfect paste awareness we'd need IDE integration (planned for V1.0).
+
+## Privacy
+
+- **100% local execution.** No external API calls, no telemetry, no analytics.
+- Your prompts and corrections never leave your machine.
+- Any future error history will live at `~/.better-phrase/`, owned by you (planned for V0.3).
+
+## Roadmap
+
+- [x] **V0.1** — initial release
+- [x] **V0.2** — Chinese → English translation toggle
+- [ ] **V0.3** — local error history + `better-phrase stats` subcommand
+- [ ] **V0.4** — spaced repetition (SRS) review of past mistakes
+- [ ] **V0.5** — 中式英语 pattern library (specialized 中式英语 detection)
+- [ ] **V1.0** — cross-tool support (Cursor / VS Code / Chrome extension sharing the same error history)
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE).
+
+---
+
+<div align="center">
+
+**Star ⭐ if Better Phrase helped you write better English in Claude Code.**
+
+</div>

@@ -1,0 +1,18 @@
+[project]
+name = "better-phrase"
+version = "0.2.0"
+description = "Better Phrase — English phrasing polish via Claude Code hook."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+better-phrase = "better_phrase.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["better_phrase"]

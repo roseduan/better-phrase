@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/better-phrase.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
