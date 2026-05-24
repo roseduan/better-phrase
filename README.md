@@ -63,25 +63,23 @@ The core thesis: **boolean decisions belong in code, not in the LLM**. The LLM s
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) installed and working
 - **Python 3.9+** (pre-installed on macOS and most Linux distros)
-- **jq** — only needed if you use the bundled installer (it edits `~/.claude/settings.json` safely)
-  - macOS: `brew install jq`
-  - Linux: `sudo apt install jq` (or your distro's equivalent)
+- **git** and **jq** — used by the installer
+  - macOS: `brew install git jq`
+  - Linux: `sudo apt install git jq` (or your distro's equivalent)
 
 ## Installation
 
-You have two ways to install — pick whichever matches your workflow. Both end up registering the same `UserPromptSubmit` hook with Claude Code.
-
-### Option A — via skills.sh (recommended)
+### Option A — one-liner (recommended)
 
 ```bash
-npx skills add roseduan/better-phrase
+curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/install.sh | bash
 ```
 
-This pulls the skill into Claude Code's skill registry and wires up the hook automatically. Best if you already use `skills.sh` to manage other skills.
+Auto-clones the repo to `~/.claude/skills/better-phrase/`, registers the `UserPromptSubmit` hook in `~/.claude/settings.json`, and backs up your existing settings. Re-running pulls the latest version. Override the clone path with `BETTER_PHRASE_HOME=/path bash ...`.
 
-### Option B — via the bundled installer
+### Option B — clone + install (audit before running)
 
-Clone the repo somewhere permanent (the installer points Claude Code at the local script — don't delete the folder after).
+If you'd rather read the script before executing it:
 
 ```bash
 git clone https://github.com/roseduan/better-phrase.git ~/.claude/skills/better-phrase
@@ -89,11 +87,11 @@ cd ~/.claude/skills/better-phrase
 ./install.sh
 ```
 
-What the installer does:
+What the installer does (either option):
 
-1. Checks that `~/.claude/` exists and that `python3` / `jq` are installed
+1. Checks `~/.claude/` exists and that `python3` / `jq` / `git` are installed
 2. Backs up your existing `~/.claude/settings.json` (timestamped backup)
-3. Adds a `UserPromptSubmit` hook entry pointing at `better-phrase.sh` in the cloned folder
+3. Adds a `UserPromptSubmit` hook entry pointing at `better-phrase.sh`
 4. Cleans up any previous Better Phrase entries from earlier installs
 
 ### Verify it works

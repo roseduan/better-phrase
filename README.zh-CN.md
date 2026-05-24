@@ -61,25 +61,23 @@
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) 已经装好并能正常使用
 - **Python 3.9+**(macOS / 多数 Linux 默认自带)
-- **jq** — 仅"方式 B"安装脚本需要(用来安全编辑 `~/.claude/settings.json`)
-  - macOS: `brew install jq`
-  - Linux: `sudo apt install jq`(或对应发行版)
+- **git** 和 **jq** — 安装脚本需要
+  - macOS: `brew install git jq`
+  - Linux: `sudo apt install git jq`(或对应发行版)
 
 ## 安装
 
-两种方式任选其一,结果一样:都是给 Claude Code 注册一个 `UserPromptSubmit` hook。
-
-### 方式 A:通过 skills.sh(推荐)
+### 方式 A:一行命令(推荐)
 
 ```bash
-npx skills add roseduan/better-phrase
+curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/install.sh | bash
 ```
 
-把这个 skill 加入 Claude Code 的 skill 注册表,hook 自动接好。如果你本来就在用 `skills.sh` 管理 skill,选这个。
+自动 clone 到 `~/.claude/skills/better-phrase/`,把 `UserPromptSubmit` hook 注册进 `~/.claude/settings.json`,并备份旧设置。重跑会拉最新版。要自定义 clone 路径:`BETTER_PHRASE_HOME=/path bash ...`。
 
-### 方式 B:仓库自带安装脚本
+### 方式 B:先 clone 再装(看过脚本再跑)
 
-把仓库克隆到一个**长期保留**的目录(安装脚本会让 Claude Code 指向本地脚本,删掉文件夹 hook 就坏了)。
+如果你希望先看一眼脚本内容再执行:
 
 ```bash
 git clone https://github.com/roseduan/better-phrase.git ~/.claude/skills/better-phrase
@@ -87,9 +85,9 @@ cd ~/.claude/skills/better-phrase
 ./install.sh
 ```
 
-安装脚本做的事:
+安装脚本做的事(两种方式一样):
 
-1. 检查 `~/.claude/` 存在,以及 `python3` / `jq` 都可用
+1. 检查 `~/.claude/` 存在,且 `python3` / `jq` / `git` 都可用
 2. 备份你现有的 `~/.claude/settings.json`(带时间戳)
 3. 往 `hooks.UserPromptSubmit` 加一条指向 `better-phrase.sh` 的入口
 4. 清理掉之前装过的旧版本 hook 入口(如有)
