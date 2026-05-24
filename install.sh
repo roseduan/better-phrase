@@ -10,7 +10,6 @@ set -euo pipefail
 
 REPO_URL="https://github.com/roseduan/better-phrase.git"
 DEFAULT_HOME="$HOME/.claude/skills/better-phrase"
-PURGE_PATTERN='/better-phrase\.sh$'
 SETTINGS_DIR="$HOME/.claude"
 SETTINGS="$SETTINGS_DIR/settings.json"
 
@@ -45,13 +44,6 @@ fi
 if [ ! -d "$SETTINGS_DIR" ]; then
   red "❌ ~/.claude directory not found."
   echo "   Install Claude Code first: https://docs.claude.com/en/docs/claude-code"
-  exit 1
-fi
-
-if ! command -v jq >/dev/null 2>&1; then
-  red "❌ jq is required (used by this installer to edit settings.json)."
-  echo "   macOS:  brew install jq"
-  echo "   Linux:  sudo apt install jq   (or your distro's equivalent)"
   exit 1
 fi
 
@@ -116,38 +108,9 @@ if [ -f "$SETTINGS" ]; then
   cp "$SETTINGS" "$BACKUP"
   green "✓ Backed up existing settings.json"
   dim   "  → $BACKUP"
-
-  # Purge any prior Better Phrase entry, then append the new canonical entry.
-  jq --arg cmd "$HOOK_SCRIPT" --arg pat "$PURGE_PATTERN" '
-    .hooks //= {}
-    | .hooks.UserPromptSubmit //= []
-    | .hooks.UserPromptSubmit |= [
-        .[] |
-        if .matcher != null then
-          .hooks |= map(select((.command | test($pat)) | not))
-          | select(.hooks | length > 0)
-        else
-          select((.command | test($pat)) | not)
-        end
-      ]
-    | .hooks.UserPromptSubmit += [{
-        matcher: "",
-        hooks: [{ type: "command", command: $cmd, timeout: 10 }]
-      }]
-  ' "$SETTINGS" > "$SETTINGS.tmp" && mv "$SETTINGS.tmp" "$SETTINGS"
+  python3 "$PROJECT_DIR/tools/settings_patch.py" install "$SETTINGS" "$HOOK_SCRIPT"
 else
-  jq -n --arg cmd "$HOOK_SCRIPT" '{
-    hooks: {
-      UserPromptSubmit: [
-        {
-          matcher: "",
-          hooks: [
-            { type: "command", command: $cmd, timeout: 10 }
-          ]
-        }
-      ]
-    }
-  }' > "$SETTINGS"
+  python3 "$PROJECT_DIR/tools/settings_patch.py" install "$SETTINGS" "$HOOK_SCRIPT"
   green "✓ Created ~/.claude/settings.json"
 fi
 

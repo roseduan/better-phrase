@@ -61,9 +61,9 @@
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) 已经装好并能正常使用
 - **Python 3.9+**(macOS / 多数 Linux 默认自带)
-- **git** 和 **jq** — 安装脚本需要
-  - macOS: `brew install git jq`
-  - Linux: `sudo apt install git jq`(或对应发行版)
+- **git** — 安装脚本用来拉取源码
+  - macOS: `brew install git`(通常 Xcode CLI tools 自带)
+  - Linux: `sudo apt install git`(或对应发行版)
 
 ## 安装
 
@@ -87,7 +87,7 @@ cd ~/.claude/skills/better-phrase
 
 安装脚本做的事(两种方式一样):
 
-1. 检查 `~/.claude/` 存在,且 `python3` / `jq` / `git` 都可用
+1. 检查 `~/.claude/` 存在,且 `python3` / `git` 都可用
 2. 备份你现有的 `~/.claude/settings.json`(带时间戳)
 3. 往 `hooks.UserPromptSubmit` 加一条指向 `better-phrase.sh` 的入口
 4. 清理掉之前装过的旧版本 hook 入口(如有)

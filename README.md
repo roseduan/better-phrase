@@ -63,9 +63,9 @@ The core thesis: **boolean decisions belong in code, not in the LLM**. The LLM s
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) installed and working
 - **Python 3.9+** (pre-installed on macOS and most Linux distros)
-- **git** and **jq** — used by the installer
-  - macOS: `brew install git jq`
-  - Linux: `sudo apt install git jq` (or your distro's equivalent)
+- **git** — used by the installer to fetch the source
+  - macOS: `brew install git` (usually pre-installed via Xcode CLI tools)
+  - Linux: `sudo apt install git` (or your distro's equivalent)
 
 ## Installation
 
@@ -89,7 +89,7 @@ cd ~/.claude/skills/better-phrase
 
 What the installer does (either option):
 
-1. Checks `~/.claude/` exists and that `python3` / `jq` / `git` are installed
+1. Checks `~/.claude/` exists and that `python3` / `git` are installed
 2. Backs up your existing `~/.claude/settings.json` (timestamped backup)
 3. Adds a `UserPromptSubmit` hook entry pointing at `better-phrase.sh`
 4. Cleans up any previous Better Phrase entries from earlier installs
