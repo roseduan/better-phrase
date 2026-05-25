@@ -77,7 +77,7 @@ The core thesis: **boolean decisions belong in code, not in the LLM**. The LLM s
 ### Option A — one-liner (recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/install.sh | bash
+curl -fsSL https://betterphrase.roseduan.cn/install.sh | bash
 ```
 
 Auto-clones the repo to `~/.claude/skills/better-phrase/`, registers the `UserPromptSubmit` hook in `~/.claude/settings.json`, and backs up your existing settings. Re-running pulls the latest version. Override the clone path with `BETTER_PHRASE_HOME=/path bash ...`.
@@ -112,13 +112,13 @@ If nothing appears, check that `~/.claude/settings.json` contains an entry under
 One-liner (mirrors the install entry point):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash
+curl -fsSL https://betterphrase.roseduan.cn/uninstall.sh | bash
 ```
 
 To also delete the cloned source directory:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash -s -- --purge
+curl -fsSL https://betterphrase.roseduan.cn/uninstall.sh | bash -s -- --purge
 ```
 
 From a local clone:

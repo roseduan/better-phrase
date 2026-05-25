@@ -75,7 +75,7 @@
 ### 方式 A:一行命令(推荐)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/install.sh | bash
+curl -fsSL https://betterphrase.roseduan.cn/install.sh | bash
 ```
 
 自动 clone 到 `~/.claude/skills/better-phrase/`,把 `UserPromptSubmit` hook 注册进 `~/.claude/settings.json`,并备份旧设置。重跑会拉最新版。要自定义 clone 路径:`BETTER_PHRASE_HOME=/path bash ...`。
@@ -110,13 +110,13 @@ cd ~/.claude/skills/better-phrase
 一键卸载(和安装入口对称):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash
+curl -fsSL https://betterphrase.roseduan.cn/uninstall.sh | bash
 ```
 
 如果想顺便把源码目录也删掉:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash -s -- --purge
+curl -fsSL https://betterphrase.roseduan.cn/uninstall.sh | bash -s -- --purge
 ```
 
 本地仓库目录内:
