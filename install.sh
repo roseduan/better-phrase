@@ -17,9 +17,16 @@ green()  { printf "\033[32m%s\033[0m\n" "$1"; }
 yellow() { printf "\033[33m%s\033[0m\n" "$1"; }
 red()    { printf "\033[31m%s\033[0m\n" "$1"; }
 dim()    { printf "\033[2m%s\033[0m\n" "$1"; }
+bold()   { printf "\033[1m%s\033[0m\n" "$1"; }
+cyan()   { printf "\033[36m%s\033[0m\n" "$1"; }
+rule()   { printf "\033[2m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m\n"; }
 
 echo
-echo "📚 Better Phrase — installer"
+rule
+bold   "  📚 Better Phrase"
+echo   "     Polish your English phrasing, baked into Claude Code."
+cyan   "     https://github.com/roseduan/better-phrase"
+rule
 echo
 
 # ─── Mode detection: in-repo vs bootstrap ────────────────────────────────────
@@ -116,22 +123,31 @@ fi
 
 green "✓ Registered UserPromptSubmit hook"
 
+# Read installed version for the summary footer.
+VERSION="$(python3 -c "import sys; sys.path.insert(0, '$PROJECT_DIR'); from better_phrase import __version__; print(__version__)" 2>/dev/null || echo "")"
+
 echo
-green "🎉 Installation complete."
+rule
+if [ -n "$VERSION" ]; then
+  bold "  🎉 Better Phrase v${VERSION} installed."
+else
+  bold "  🎉 Better Phrase installed."
+fi
 echo
-echo "Features:"
-echo "  • English polish         — always on; catches issues when you write English"
-echo "  • Chinese translation    — on by default; shows English version when you write Chinese"
+echo "  📁 Source:    $PROJECT_DIR"
+echo "  ⚙️  Settings:  $SETTINGS"
 echo
-echo "Toggle Chinese translation any time:"
-dim "  cd $PROJECT_DIR"
-dim "  PYTHONPATH=. python3 -m better_phrase translate off    # disable"
-dim "  PYTHONPATH=. python3 -m better_phrase translate on     # re-enable"
-dim "  PYTHONPATH=. python3 -m better_phrase translate        # show status"
+echo "  Active features:"
+echo "    ✏️  English polish        — always on"
+echo "    🌐 Chinese translation   — on by default"
 echo
-echo "Next steps:"
-echo "  1. Restart Claude Code (or open a new session)"
-echo "  2. Type any English sentence — you'll see the polish tip block appear"
+echo "  Toggles (from source dir):"
+dim  "    PYTHONPATH=. python3 -m better_phrase translate off    # disable Chinese translation"
+dim  "    PYTHONPATH=. python3 -m better_phrase timing off       # hide timing footer"
 echo
-dim "To uninstall:  bash $PROJECT_DIR/uninstall.sh"
+echo "  Next: restart Claude Code, then try typing English or Chinese."
+echo
+dim  "  Uninstall:  bash $PROJECT_DIR/uninstall.sh"
+dim  "  Docs:       https://github.com/roseduan/better-phrase"
+rule
 echo

@@ -104,10 +104,26 @@ If nothing appears, check that `~/.claude/settings.json` contains an entry under
 
 ### Uninstall
 
-- Installed via `npx skills add` → `npx skills remove better-phrase`
-- Installed via `./install.sh` → from the repo folder, run `./uninstall.sh`
+One-liner (mirrors the install entry point):
 
-The uninstaller removes the hook entry from `~/.claude/settings.json` and restores from backup if needed. Your installed folder stays put — delete it manually if you no longer want it.
+```bash
+curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash
+```
+
+To also delete the cloned source directory:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash -s -- --purge
+```
+
+From a local clone:
+
+```bash
+./uninstall.sh            # remove hook only
+./uninstall.sh --purge    # also delete the source directory (refused when run from inside it)
+```
+
+The uninstaller backs up `~/.claude/settings.json` (timestamped) before editing, removes the Better Phrase hook entry, and prints exactly what it changed. Without `--purge`, your installed folder stays put.
 
 ## Configuration
 

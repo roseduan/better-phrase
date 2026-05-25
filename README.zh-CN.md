@@ -102,10 +102,26 @@ cd ~/.claude/skills/better-phrase
 
 ### 卸载
 
-- 用 `npx skills add` 装的 → `npx skills remove better-phrase`
-- 用 `./install.sh` 装的 → 在仓库目录跑 `./uninstall.sh`
+一键卸载(和安装入口对称):
 
-卸载脚本会移除 `~/.claude/settings.json` 里的 hook 入口(需要时从备份还原)。仓库文件夹本身**不会被删**,如果不再需要可以手动删除。
+```bash
+curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash
+```
+
+如果想顺便把源码目录也删掉:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/uninstall.sh | bash -s -- --purge
+```
+
+本地仓库目录内:
+
+```bash
+./uninstall.sh            # 只移除 hook
+./uninstall.sh --purge    # 同时删除源码目录(在仓库目录里跑会被拒,避免自删)
+```
+
+卸载脚本会先给 `~/.claude/settings.json` 打时间戳备份,再移除 Better Phrase 的 hook 入口,并清楚地打印改了哪些。不加 `--purge` 时,源码目录保持原样。
 
 ## 配置
 
