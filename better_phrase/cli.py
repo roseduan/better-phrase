@@ -34,18 +34,6 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="'on' to enable, 'off' to disable. Omit to show current state.",
     )
 
-    timing_parser = sub.add_parser(
-        "timing",
-        help="Show or change the overhead-timing display.",
-    )
-    timing_parser.add_argument(
-        "state",
-        nargs="?",
-        choices=("on", "off"),
-        default=None,
-        help="'on' to show timing footer in every BP block, 'off' to hide.",
-    )
-
     args = parser.parse_args(argv)
 
     if args.command == "hook":
@@ -55,9 +43,6 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "translate":
         return _translate_command(args.state)
-
-    if args.command == "timing":
-        return _timing_command(args.state)
 
     parser.print_help()
     return 1
@@ -82,30 +67,6 @@ def _translate_command(new_state: str | None) -> int:
     else:
         print("✓ Chinese translation: off")
         print("  Writing Chinese will be silent. English polish is still active.")
-    return 0
-
-
-def _timing_command(new_state: str | None) -> int:
-    if new_state is None:
-        current = "on" if config.get_show_timing() else "off"
-        print(f"Overhead timing display: {current}")
-        print()
-        print("When on, every BP block ends with a footer like:")
-        print("  *(⏱ Better Phrase: 52ms hook)*")
-        print()
-        print("To toggle:")
-        print("  better-phrase timing on     # show timing footer")
-        print("  better-phrase timing off    # hide it")
-        return 0
-
-    enabled = new_state == "on"
-    config.set_show_timing(enabled)
-    if enabled:
-        print("✓ Timing display: on")
-        print("  Every BP block now ends with a ⏱ overhead line.")
-    else:
-        print("✓ Timing display: off")
-        print("  BP blocks will no longer include the overhead line.")
     return 0
 
 

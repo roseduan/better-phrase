@@ -59,22 +59,5 @@ class ConfigTests(unittest.TestCase):
         cfg = self.config.load()
         self.assertEqual(cfg["hint_shown_count"], 2)
 
-    def test_timing_default_on(self):
-        self.assertTrue(self.config.get_show_timing())
-
-    def test_set_timing(self):
-        self.config.set_show_timing(False)
-        self.assertFalse(self.config.get_show_timing())
-        self.config.set_show_timing(True)
-        self.assertTrue(self.config.get_show_timing())
-
-    def test_timing_independent_from_translate(self):
-        self.config.set_translate_enabled(False)
-        self.config.set_show_timing(False)
-        cfg = self.config.load()
-        self.assertFalse(cfg["translate_enabled"])
-        self.assertFalse(cfg["show_timing"])
-
-
 if __name__ == "__main__":
     unittest.main()

@@ -18,19 +18,16 @@ from typing import TextIO
 
 from . import config
 from .detector import route_intent
-from .prompts import HINT_FOOTER, POLISH_INSTRUCTIONS, TIMING_FOOTER, TRANSLATION_INSTRUCTIONS
+from .prompts import (
+    HINT_FOOTER,
+    POLISH_INSTRUCTIONS,
+    TIMING_PLACEHOLDER,
+    TRANSLATION_INSTRUCTIONS,
+)
 
 
 def run(stdin: TextIO | None = None, stdout: TextIO | None = None) -> int:
-    # Prefer the start time captured at __main__ entry (includes imports);
-    # fall back to a local clock when run() is invoked programmatically (tests).
-    import os
-
-    start_ns_env = os.environ.get("BP_HOOK_START_NS")
-    if start_ns_env and start_ns_env.isdigit():
-        hook_start_ns = int(start_ns_env)
-    else:
-        hook_start_ns = time.perf_counter_ns()
+    start = time.perf_counter()
 
     stdin = stdin or sys.stdin
     stdout = stdout or sys.stdout
@@ -57,9 +54,8 @@ def run(stdin: TextIO | None = None, stdout: TextIO | None = None) -> int:
             # Counter persistence is best-effort; never fail the hook over it.
             pass
 
-    if config.get_show_timing():
-        hook_ms = max(1, round((time.perf_counter_ns() - hook_start_ns) / 1_000_000))
-        template = template + TIMING_FOOTER.replace("__HOOK_MS__", str(hook_ms))
+    elapsed_ms = max(1, int((time.perf_counter() - start) * 1000))
+    template = template.replace(TIMING_PLACEHOLDER, str(elapsed_ms))
 
     json.dump(
         {

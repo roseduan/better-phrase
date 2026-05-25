@@ -143,22 +143,6 @@ PYTHONPATH=. python3 -m better_phrase translate off       # disable
 PYTHONPATH=. python3 -m better_phrase translate on        # re-enable
 ```
 
-### Overhead timing display
-
-Every BP block ends with a small footer showing the time spent in the hook step:
-
-```
-*(⏱ Better Phrase: 21ms hook)*
-```
-
-Toggle it any time:
-
-```bash
-PYTHONPATH=. python3 -m better_phrase timing              # show state
-PYTHONPATH=. python3 -m better_phrase timing off          # hide the footer
-PYTHONPATH=. python3 -m better_phrase timing on           # re-enable
-```
-
 ### Behavior matrix
 
 | Input | `translate=on` (default) | `translate=off` |

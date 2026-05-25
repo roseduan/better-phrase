@@ -16,7 +16,6 @@ from pathlib import Path
 from typing import Any
 
 DEFAULT_TRANSLATE_ENABLED = True
-DEFAULT_SHOW_TIMING = True
 HINT_LIMIT = 3  # Show "how to disable" footer this many times, then stop.
 
 
@@ -31,7 +30,6 @@ def _config_path() -> Path:
 def _defaults() -> dict[str, Any]:
     return {
         "translate_enabled": DEFAULT_TRANSLATE_ENABLED,
-        "show_timing": DEFAULT_SHOW_TIMING,
         "hint_shown_count": 0,
     }
 
@@ -66,16 +64,6 @@ def get_translate_enabled() -> bool:
 def set_translate_enabled(enabled: bool) -> None:
     cfg = load()
     cfg["translate_enabled"] = bool(enabled)
-    save(cfg)
-
-
-def get_show_timing() -> bool:
-    return bool(load().get("show_timing", DEFAULT_SHOW_TIMING))
-
-
-def set_show_timing(enabled: bool) -> None:
-    cfg = load()
-    cfg["show_timing"] = bool(enabled)
     save(cfg)
 
 

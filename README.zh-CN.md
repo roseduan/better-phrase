@@ -141,22 +141,6 @@ PYTHONPATH=. python3 -m better_phrase translate off       # 关闭中文翻译
 PYTHONPATH=. python3 -m better_phrase translate on        # 重新开启
 ```
 
-### 耗时显示
-
-每个 BP 块结尾会附一行 footer,显示这次 hook 步骤的耗时:
-
-```
-*(⏱ Better Phrase: 21ms hook)*
-```
-
-可以随时切换:
-
-```bash
-PYTHONPATH=. python3 -m better_phrase timing              # 查看状态
-PYTHONPATH=. python3 -m better_phrase timing off          # 隐藏 footer
-PYTHONPATH=. python3 -m better_phrase timing on           # 重新开启
-```
-
 ### 行为对照表
 
 | 输入 | `translate=on`(默认) | `translate=off` |

@@ -90,7 +90,8 @@ class HookTests(unittest.TestCase):
         code, out = self._run({"prompt": "你好,这是中文输入,请帮我看下"})
         self.assertEqual(code, 0)
         ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
-        self.assertIn("English:", ctx)
+        self.assertIn("**Better Phrase** (", ctx)
+        self.assertIn("*🌐 English:*", ctx)
 
     def test_chinese_silent_when_translate_off(self):
         self._set_translate(False)
@@ -105,7 +106,8 @@ class HookTests(unittest.TestCase):
         self._suppress_hint()
         code, out = self._run({"prompt": "Hi Mike, 关于明天的会议我想确认一下时间表能否再调整"})
         ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
-        self.assertIn("English:", ctx)
+        self.assertIn("**Better Phrase** (", ctx)
+        self.assertIn("*🌐 English:*", ctx)
 
     def test_mixed_english_dominant_polishes(self):
         self._suppress_hint()
@@ -131,37 +133,38 @@ class HookTests(unittest.TestCase):
         ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
         self.assertNotIn("better-phrase translate off", ctx)
 
-    # ── Timing footer behavior ─────────────────────────────────────────────
+    # ── Brand header ───────────────────────────────────────────────────────
 
-    def test_timing_footer_present_by_default(self):
+    def test_polish_block_carries_brand_header(self):
         self._suppress_hint()
         code, out = self._run({"prompt": "how are you today"})
         ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
-        self.assertIn("⏱ Better Phrase", ctx)
-        self.assertIn("ms hook", ctx)
+        self.assertRegex(ctx, r"\*✦ \*\*Better Phrase\*\* \(\d+ms\)\*")
+        self.assertIn("*✏️ English tip:*", ctx)
 
-    def test_timing_footer_substitutes_real_hook_ms(self):
-        import re
+    def test_translation_block_carries_brand_header(self):
+        self._suppress_hint()
+        code, out = self._run({"prompt": "你好,这是中文输入,请帮我看下"})
+        ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
+        self.assertRegex(ctx, r"\*✦ \*\*Better Phrase\*\* \(\d+ms\)\*")
+        self.assertIn("*🌐 English:*", ctx)
 
+    def test_polish_block_lines_are_italicized(self):
+        # Every BP-block bullet line should be wrapped in italic markers so
+        # Claude Code renders the block as dim grey.
         self._suppress_hint()
         code, out = self._run({"prompt": "how are you today"})
         ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
-        # Placeholder must have been substituted with an actual integer.
-        self.assertNotIn("__HOOK_MS__", ctx)
-        m = re.search(r"Better Phrase: (\d+)ms hook", ctx)
-        self.assertIsNotNone(m, f"hook_ms not found in context tail: {ctx[-300:]}")
-        # Sanity bound — hook runs in well under 1000ms even in slow CI.
-        self.assertLess(int(m.group(1)), 1000)
+        self.assertIn("*- \"original phrase\" → \"corrected phrase\"", ctx)
+        self.assertIn("*✍️ **Better Phrase:**", ctx)
 
-    def test_timing_footer_omitted_when_disabled(self):
-        from better_phrase import config
-
-        config.set_show_timing(False)
+    def test_timing_placeholder_is_substituted(self):
+        # The hook should replace {timing_ms} with an integer count of
+        # elapsed milliseconds — no raw placeholder should leak into output.
         self._suppress_hint()
         code, out = self._run({"prompt": "how are you today"})
         ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
-        self.assertNotIn("⏱", ctx)
-        self.assertNotIn("ms hook", ctx)
+        self.assertNotIn("{timing_ms}", ctx)
 
 
 if __name__ == "__main__":
