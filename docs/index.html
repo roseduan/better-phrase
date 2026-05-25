@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Better Phrase — 给 Claude Code 装一个英文润色器</title>
+<meta name="description" content="Better Phrase 是一个 Claude Code 插件,在你写英文时挑出语法和用词问题,写中文时给地道英文版,其他时候完全静默。100% 本地,0 token 噪声。">
+<meta property="og:title" content="Better Phrase — 给 Claude Code 装一个英文润色器">
+<meta property="og:description" content="写英文挑错,写中文翻译,代码命令静默。100% 本地,0 token 噪声。">
+<meta property="og:url" content="https://betterphrase.roseduan.cn">
+<meta property="og:type" content="website">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'media',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'Noto Sans SC', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        },
+        colors: {
+          brand: {
+            50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe',
+            400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81',
+          },
+        },
+      },
+    },
+  }
+</script>
+<style>
+  body { font-feature-settings: 'cv11', 'ss01'; }
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(99,102,241,0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(99,102,241,0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .grid-bg {
+      background-image:
+        linear-gradient(to right, rgba(129,140,248,0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(129,140,248,0.08) 1px, transparent 1px);
+    }
+  }
+</style>
+</head>
+<body class="font-sans bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
+
+<!-- Header -->
+<header class="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border-b border-slate-200/60 dark:border-slate-800/60">
+  <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2 font-bold">
+      <span class="text-brand-600 dark:text-brand-400"><svg width="22" height="22" viewBox="0 0 64 64" fill="currentColor"><mask id="h-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#h-c)"/></svg></span>
+      <span>Better Phrase</span>
+    </a>
+    <nav class="flex items-center gap-5 text-sm">
+      <a href="#demo" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">演示</a>
+      <a href="#vs" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">vs CLAUDE.md</a>
+      <a href="#install" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">安装</a>
+      <a href="/en/" class="text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">EN</a>
+      <a href="https://github.com/roseduan/better-phrase" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 text-white text-xs font-medium hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.78 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.73.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="top" class="relative grid-bg">
+  <div class="max-w-6xl mx-auto px-6 pt-20 pb-24 sm:pt-28 sm:pb-32 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-200 text-xs font-medium mb-6">
+      <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+      100% 本地 · 0 API 调用 · 0 遥测
+    </div>
+    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight">
+      给 <span class="text-brand-600 dark:text-brand-400">Claude Code</span> 装一个<br class="hidden sm:block">
+      英文<span class="relative inline-block"><span class="relative z-10">润色器</span><span class="absolute inset-x-0 bottom-1 h-3 bg-brand-200 dark:bg-brand-700/40 -z-0"></span></span>
+    </h1>
+    <p class="mt-6 text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+      写英文挑出语法、用词、地道度问题。写中文顺手给一段地道英文版。<br>
+      代码、命令、不需要的输入 — <span class="font-semibold text-slate-900 dark:text-slate-100">完全静默</span>。
+    </p>
+
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <div class="group relative font-mono text-sm bg-slate-900 dark:bg-slate-800 text-slate-100 rounded-lg px-5 py-3 pr-14 shadow-lg shadow-brand-600/10 border border-slate-800 dark:border-slate-700 w-full sm:w-auto overflow-x-auto">
+        <span class="text-brand-400 select-none">$ </span><span id="install-cmd">curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/install.sh | bash</span>
+        <button onclick="copyInstall(this)" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition" aria-label="复制">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+      </div>
+      <a href="https://github.com/roseduan/better-phrase" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-300 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800">
+        在 GitHub 查看
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+    <p class="mt-4 text-xs text-slate-500 dark:text-slate-400">
+      需要 Python 3.9+ · 已安装 Claude Code · 一行命令完成 hook 注册
+    </p>
+  </div>
+</section>
+
+<!-- Demo -->
+<section id="demo" class="py-20 sm:py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14">
+      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">演示</p>
+      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">看看它在 Claude Code 里长什么样</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- English tip -->
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-4 text-xs font-mono text-slate-500 dark:text-slate-400">
+          <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="ml-2">写英文时</span>
+        </div>
+        <div class="font-mono text-xs text-slate-500 dark:text-slate-400 mb-2"># 你输入:</div>
+        <div class="font-mono text-sm bg-slate-50 dark:bg-slate-800 rounded-md px-3 py-2 mb-4">how are you todya, tell me a joke</div>
+        <div class="border-l-2 border-brand-400 pl-4 space-y-2 text-sm text-slate-600 dark:text-slate-400 italic">
+          <p>✦ <b>Better Phrase</b> · English tip</p>
+          <p>· "todya" → "today" — 拼写错误,字母顺序颠倒。</p>
+          <p>· comma splice — 两个独立句子应该用句号。</p>
+          <p>✍️ <b>Better phrase:</b> "Hey, how's it going today? Also, tell me a joke."</p>
+        </div>
+      </div>
+      <!-- Chinese translate -->
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-4 text-xs font-mono text-slate-500 dark:text-slate-400">
+          <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="ml-2">写中文时</span>
+        </div>
+        <div class="font-mono text-xs text-slate-500 dark:text-slate-400 mb-2"># 你输入:</div>
+        <div class="font-mono text-sm bg-slate-50 dark:bg-slate-800 rounded-md px-3 py-2 mb-4">我想约客户下周二开会讨论合同细节</div>
+        <div class="border-l-2 border-brand-400 pl-4 space-y-2 text-sm text-slate-600 dark:text-slate-400 italic">
+          <p>✦ <b>Better Phrase</b> · English</p>
+          <p>"I'd like to schedule a meeting with the client next Tuesday to go over the contract details."</p>
+        </div>
+      </div>
+    </div>
+    <p class="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+      写代码、敲命令、或者不需要翻译的中文 — <b class="text-slate-900 dark:text-slate-100">完全静默</b>,0 token,0 干扰。
+    </p>
+  </div>
+</section>
+
+<!-- vs CLAUDE.md -->
+<section id="vs" class="py-20 sm:py-24 bg-slate-50 dark:bg-slate-900/40">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14">
+      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">为什么不用 CLAUDE.md</p>
+      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">布尔决策属于代码,不属于 LLM</h2>
+      <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+        在 CLAUDE.md 里写"写英文时帮我润色"看似一样,但每条消息都要交一次税。
+      </p>
+    </div>
+    <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 dark:bg-slate-800/60">
+          <tr class="text-left">
+            <th class="px-6 py-4 font-semibold"></th>
+            <th class="px-6 py-4 font-semibold text-slate-500">在 CLAUDE.md 里写规则</th>
+            <th class="px-6 py-4 font-semibold text-brand-600 dark:text-brand-400">Better Phrase</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+          <tr>
+            <td class="px-6 py-4 font-medium">Token 成本</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400"><b>每条</b>消息都加载完整规则(~400 token)</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">只在<b>真正触发时</b>才注入</td>
+          </tr>
+          <tr>
+            <td class="px-6 py-4 font-medium">触发判定</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">模型自己判断(易遗忘 / 误触发)</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">确定性判断,100% 一致</td>
+          </tr>
+          <tr>
+            <td class="px-6 py-4 font-medium">纯中文 / 代码</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">仍占用 token</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300"><b>0 token</b>,完全静默</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-6 text-center text-base text-slate-700 dark:text-slate-300">
+      全天用下来 token 成本降低 <b class="text-brand-600 dark:text-brand-400">5–10 倍</b>,触发可靠性更高。
+    </p>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="py-20 sm:py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14">
+      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">特性</p>
+      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">小而克制,做好一件事</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
+        <div class="text-2xl mb-3">✏️</div>
+        <h3 class="font-semibold mb-1">英文润色</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">语法 / 词汇 / 表达地道度修正,顺手给一段 native rewrite。</p>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
+        <div class="text-2xl mb-3">🌐</div>
+        <h3 class="font-semibold mb-1">中文 → 英文翻译</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">写中文时附带一段地道英文版本,可一键开关。</p>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
+        <div class="text-2xl mb-3">🎯</div>
+        <h3 class="font-semibold mb-1">零干扰</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">代码、命令、不相关输入完全不触发,不浪费一个 token。</p>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
+        <div class="text-2xl mb-3">🇨🇳</div>
+        <h3 class="font-semibold mb-1">中文讲解</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">tip 用中文解释,聚焦常见中式英语模式,看一次记一次。</p>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
+        <div class="text-2xl mb-3">🚀</div>
+        <h3 class="font-semibold mb-1">启动开销可忽略</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">hook 本身只做语言检测,相对 Claude 响应延迟感知不到。</p>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
+        <div class="text-2xl mb-3">🔒</div>
+        <h3 class="font-semibold mb-1">100% 本地</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">无 API 调用,无遥测,数据永不出本机。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Install -->
+<section id="install" class="py-20 sm:py-24 bg-slate-50 dark:bg-slate-900/40">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">安装</p>
+      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">30 秒装好</h2>
+    </div>
+    <div class="space-y-6">
+      <div>
+        <div class="text-sm font-semibold mb-2 text-slate-700 dark:text-slate-200">方式 A · 一行命令</div>
+        <pre class="font-mono text-sm bg-slate-900 dark:bg-slate-800 text-slate-100 rounded-lg p-4 overflow-x-auto"><span class="text-brand-400">$</span> curl -fsSL https://raw.githubusercontent.com/roseduan/better-phrase/main/install.sh | bash</pre>
+      </div>
+      <div>
+        <div class="text-sm font-semibold mb-2 text-slate-700 dark:text-slate-200">方式 B · 先 clone 再装(看过脚本再跑)</div>
+        <pre class="font-mono text-sm bg-slate-900 dark:bg-slate-800 text-slate-100 rounded-lg p-4 overflow-x-auto"><span class="text-brand-400">$</span> git clone https://github.com/roseduan/better-phrase.git ~/.claude/skills/better-phrase
+<span class="text-brand-400">$</span> cd ~/.claude/skills/better-phrase
+<span class="text-brand-400">$</span> ./install.sh</pre>
+      </div>
+      <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 text-sm text-slate-600 dark:text-slate-300">
+        <p class="font-semibold text-slate-800 dark:text-slate-100 mb-2">安装脚本做了什么</p>
+        <ol class="list-decimal pl-5 space-y-1">
+          <li>检查 <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">~/.claude/</code> 存在,且 <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">python3</code> / <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">git</code> 可用</li>
+          <li>给你现有的 <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">~/.claude/settings.json</code> 打时间戳备份</li>
+          <li>往 <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">hooks.UserPromptSubmit</code> 加一条入口</li>
+          <li>清理掉之前装过的旧版本(如有)</li>
+        </ol>
+      </div>
+      <div class="text-sm text-slate-600 dark:text-slate-400">
+        装完<b class="text-slate-900 dark:text-slate-100">重启 Claude Code</b>,然后输入任意一句英文,会看到 <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">✦ Better Phrase · English tip</code> 块出现。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-slate-200 dark:border-slate-800 py-10">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
+    <div class="flex items-center gap-2">
+      <span class="text-brand-600 dark:text-brand-400"><svg width="16" height="16" viewBox="0 0 64 64" fill="currentColor"><mask id="f-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#f-c)"/></svg></span>
+      <span>Better Phrase · Apache 2.0</span>
+    </div>
+    <div class="flex items-center gap-5">
+      <a href="/en/" class="hover:text-brand-600 dark:hover:text-brand-400">English</a>
+      <a href="https://github.com/roseduan/better-phrase" class="hover:text-brand-600 dark:hover:text-brand-400">GitHub</a>
+      <a href="https://github.com/roseduan/better-phrase/issues" class="hover:text-brand-600 dark:hover:text-brand-400">问题反馈</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function copyInstall(btn) {
+    const text = document.getElementById('install-cmd').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.innerHTML;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+      btn.classList.add('text-emerald-400');
+      setTimeout(() => { btn.innerHTML = original; btn.classList.remove('text-emerald-400'); }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>
