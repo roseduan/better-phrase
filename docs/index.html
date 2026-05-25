@@ -55,11 +55,17 @@
 <!-- Header -->
 <header class="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border-b border-slate-200/60 dark:border-slate-800/60">
   <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-    <div></div>
-    <nav class="flex items-center gap-5 text-sm">
-      <a href="#demo" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">演示</a>
-      <a href="#vs" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">vs CLAUDE.md</a>
-      <a href="#install" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">安装</a>
+    <div class="flex items-center gap-6">
+      <a href="#top" class="flex items-center gap-2 text-slate-900 dark:text-slate-50 font-bold">
+        <svg width="20" height="20" viewBox="0 0 64 64" fill="currentColor" aria-label="Better Phrase logo"><mask id="nav-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#nav-c)"/></svg>
+        <span class="text-sm">Better Phrase</span>
+      </a>
+      <nav class="hidden sm:flex items-center gap-5 text-sm">
+        <a href="#demo" class="text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">演示</a>
+        <a href="#install" class="text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">安装</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-3">
       <a href="/en/" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800" aria-label="Switch to English">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         EN
@@ -68,7 +74,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.78 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.73.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
         GitHub
       </a>
-    </nav>
+    </div>
   </div>
 </header>
 
@@ -92,17 +98,13 @@
       代码、命令、不需要的输入 — <span class="font-semibold text-slate-900 dark:text-slate-100">完全静默</span>。
     </p>
 
-    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+    <div class="mt-10 flex items-center justify-center">
       <div class="group relative font-mono text-sm bg-slate-900 dark:bg-slate-800 text-slate-100 rounded-lg px-5 py-3 pr-14 shadow-lg shadow-brand-600/10 border border-slate-800 dark:border-slate-700 w-full sm:w-auto overflow-x-auto">
         <span class="text-brand-400 select-none">$ </span><span id="install-cmd">curl -fsSL https://betterphrase.roseduan.cn/install.sh | bash</span>
         <button onclick="copyInstall(this)" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition" aria-label="复制">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
       </div>
-      <a href="https://github.com/roseduan/better-phrase" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-300 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800">
-        在 GitHub 查看
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
-      </a>
     </div>
     <p class="mt-4 text-xs text-slate-500 dark:text-slate-400">
       需要 Python 3.9+ · 已安装 Claude Code · 一行命令完成 hook 注册
@@ -165,14 +167,14 @@
   </div>
 </section>
 
-<!-- vs CLAUDE.md -->
+<!-- Why hook, not skill -->
 <section id="vs" class="py-20 sm:py-24 bg-slate-50 dark:bg-slate-900/40">
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-14">
-      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">为什么不用 CLAUDE.md</p>
-      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">布尔决策属于代码,不属于 LLM</h2>
+      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">为什么不是 skill</p>
+      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">语言检测交给代码 · 不交给 LLM</h2>
       <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-        在 CLAUDE.md 里写"写英文时帮我润色"看似一样,但每条消息都要交一次税。
+        "判断这条 prompt 是不是英文"是一道 yes/no 题。让 LLM 每次重新判断,看似等价,token 成本和触发可靠性完全不一样。
       </p>
     </div>
     <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -180,31 +182,36 @@
         <thead class="bg-slate-50 dark:bg-slate-800/60">
           <tr class="text-left">
             <th class="px-6 py-4 font-semibold"></th>
-            <th class="px-6 py-4 font-semibold text-slate-500">在 CLAUDE.md 里写规则</th>
-            <th class="px-6 py-4 font-semibold text-brand-600 dark:text-brand-400">Better Phrase</th>
+            <th class="px-6 py-4 font-semibold text-slate-500">如果做成 skill(让 LLM 决定调用)</th>
+            <th class="px-6 py-4 font-semibold text-brand-600 dark:text-brand-400">Better Phrase(hook + 代码过滤)</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
           <tr>
-            <td class="px-6 py-4 font-medium">Token 成本</td>
-            <td class="px-6 py-4 text-slate-600 dark:text-slate-400"><b>每条</b>消息都加载完整规则(~400 token)</td>
-            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">只在<b>真正触发时</b>才注入</td>
-          </tr>
-          <tr>
             <td class="px-6 py-4 font-medium">触发判定</td>
-            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">模型自己判断(易遗忘 / 误触发)</td>
-            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">确定性判断,100% 一致</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">每条 prompt 都要 LLM 判断要不要调用</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">Python 正则<b>确定性判定</b>,0 模型成本</td>
           </tr>
           <tr>
-            <td class="px-6 py-4 font-medium">纯中文 / 代码</td>
-            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">仍占用 token</td>
-            <td class="px-6 py-4 text-slate-700 dark:text-slate-300"><b>0 token</b>,完全静默</td>
+            <td class="px-6 py-4 font-medium">Token 成本</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">skill 描述常驻上下文,<b>每条消息都加载</b></td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">只在<b>检测到英文时</b>才注入指令</td>
+          </tr>
+          <tr>
+            <td class="px-6 py-4 font-medium">触发可靠性</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">模型可能漏调用 / 调用时机错</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">100% 一致,不依赖模型记性</td>
+          </tr>
+          <tr>
+            <td class="px-6 py-4 font-medium">非英文场景</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">就算最终不调用,描述也已经占了 token</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300"><b>0 token</b>,hook 直接退出</td>
           </tr>
         </tbody>
       </table>
     </div>
     <p class="mt-6 text-center text-base text-slate-700 dark:text-slate-300">
-      全天用下来 token 成本降低 <b class="text-brand-600 dark:text-brand-400">5–10 倍</b>,触发可靠性更高。
+      skill 适合"AI 该不该用 X 工具"这种需要判断的场景。语言检测是一道 <b class="text-brand-600 dark:text-brand-400">yes/no 题</b>,写在代码里更便宜也更稳。
     </p>
   </div>
 </section>
