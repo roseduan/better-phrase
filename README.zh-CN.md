@@ -1,5 +1,10 @@
 <div align="center">
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./logo-dark.svg">
+  <img src="./logo.svg" alt="Better Phrase" width="88">
+</picture>
+
 # Better Phrase
 
 **润色你的英文措辞,装进 Claude Code。**
