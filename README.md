@@ -7,84 +7,80 @@
 
 # Better Phrase
 
-**Polish your English phrasing, baked into Claude Code.**
+**润色你的英文措辞,装进 Claude Code。**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**English** · [中文](README.zh-CN.md)
+**中文** · [English](README.en.md)
 
 </div>
 
 ---
 
-## What it looks like
+## 演示效果
 
-When you write English:
+写英文时:
 
+> ✦ **Better Phrase** (1ms)
+>
 > ✏️ **English tip:**
 > - "I very like" → "I really like" — *very* 不能直接修饰动词。
 > - "open the light" → "turn on the light" — 开灯用 *turn on*。
 >
-> ✍️ **Better version:** "I really like coding with Claude — turn on the lights, start typing, and it just works."
+> ✍️ Better Phrase: "I really like coding with Claude — turn on the lights, start typing, and it just works."
 
-When you write Chinese:
+写中文时:
 
+> ✦ **Better Phrase** (1ms)
+>
 > 🌐 **English:**
 > "I'd like to schedule a meeting with the client next Tuesday to go over the contract details."
 
-When you write code, commands, or pure Chinese without translation need — **nothing**. Zero tokens, zero noise.
+写代码、敲命令、或者不需要翻译的中文 — **完全静默**,0 token,0 干扰。
 
-## What is this?
+## 为什么不是 skill
 
-Better Phrase is a Claude Code add-on that:
-- catches grammar and idiom issues in your **English** prompts,
-- prepends an idiomatic English version when you write in **Chinese**,
-- and stays completely silent for everything else.
+"判断这条 prompt 是不是英文"是一道 yes/no 题。让 LLM 每次重新判断,看似等价,token 成本和触发可靠性完全不一样。
 
-Useful for anyone writing English daily — PR descriptions, client emails, technical docs, Slack messages.
-
-## Why not just put rules in CLAUDE.md?
-
-| | Rules in CLAUDE.md | Better Phrase |
+| | 如果做成 skill(让 LLM 决定调用) | Better Phrase(hook + 代码过滤) |
 |---|---|---|
-| Token cost | **Every** prompt loads ~400 tokens of rules | Only when **actually triggered** |
-| Trigger reliability | LLM judges (might forget or false-positive) | Deterministic, 100% consistent |
-| Pure Chinese / code prompts | Still cost tokens | **Zero** cost, completely silent |
+| 触发判定 | 每条 prompt 都要 LLM 判断要不要调用 | Python 正则**确定性判定**,0 模型成本 |
+| Token 成本 | skill 描述常驻上下文,**每条消息都加载** | 只在**检测到英文时**才注入指令 |
+| 触发可靠性 | 模型可能漏调用 / 调用时机错 | 100% 一致,不依赖模型记性 |
+| 非英文场景 | 就算最终不调用,描述也已经占了 token | **0 token**,hook 直接退出 |
 
-**Result: 5–10× less token spend over a working day, more reliable triggering.**
+skill 适合"AI 该不该用 X 工具"这种需要判断的场景。语言检测是一道 **yes/no 题**,写在代码里更便宜也更稳。
 
-The core thesis: **boolean decisions belong in code, not in the LLM**. The LLM should generate corrections — not decide whether to generate them.
+## 特性
 
-## Features
+- ✏️ **英文润色** — 语法 / 词汇 / 表达地道度修正 + native rewrite
+- 🌐 **中文 → 英文翻译** — 地道英文版(可开关)
+- 🎯 **零干扰** — 代码 / 命令 / 不相关输入完全不触发
+- 🇨🇳 **中文讲解** — tip 用中文解释,聚焦常见**中式英语**模式
+- 🚀 **启动开销可忽略** — 相对 Claude 自身的响应延迟完全感知不到
+- 🔒 **100% 本地** — 无 API 调用,无遥测,数据永不出本机
 
-- ✏️ **English polish** — grammar, word choice, idiom fixes + native-style rewrite
-- 🌐 **Chinese → English translation** — idiomatic English version of what you said (toggleable)
-- 🎯 **Zero noise** — code, commands, and irrelevant inputs trigger nothing
-- 🇨🇳 **Chinese explanations** — tips are explained in Chinese, focused on common 中式英语 patterns
-- 🚀 **Imperceptible overhead** — far faster than Claude's own response latency
-- 🔒 **100% local** — no API calls, no telemetry, no data leaves your machine
+## 系统要求
 
-## Requirements
+- [Claude Code](https://docs.claude.com/en/docs/claude-code) 已经装好并能正常使用
+- **Python 3.9+**(macOS / 多数 Linux 默认自带)
+- **git** — 安装脚本用来拉取源码
+  - macOS: `brew install git`(通常 Xcode CLI tools 自带)
+  - Linux: `sudo apt install git`(或对应发行版)
 
-- [Claude Code](https://docs.claude.com/en/docs/claude-code) installed and working
-- **Python 3.9+** (pre-installed on macOS and most Linux distros)
-- **git** — used by the installer to fetch the source
-  - macOS: `brew install git` (usually pre-installed via Xcode CLI tools)
-  - Linux: `sudo apt install git` (or your distro's equivalent)
+## 安装
 
-## Installation
-
-### Option A — one-liner (recommended)
+### 方式 A:一行命令(推荐)
 
 ```bash
 curl -fsSL https://betterphrase.roseduan.cn/install.sh | bash
 ```
 
-Auto-clones the repo to `~/.claude/skills/better-phrase/`, registers the `UserPromptSubmit` hook in `~/.claude/settings.json`, and backs up your existing settings. Re-running pulls the latest version. Override the clone path with `BETTER_PHRASE_HOME=/path bash ...`.
+自动 clone 到 `~/.claude/skills/better-phrase/`,把 `UserPromptSubmit` hook 注册进 `~/.claude/settings.json`,并备份旧设置。重跑会拉最新版。要自定义 clone 路径:`BETTER_PHRASE_HOME=/path bash ...`。
 
-### Option B — clone + install (audit before running)
+### 方式 B:先 clone 再装(看过脚本再跑)
 
-If you'd rather read the script before executing it:
+如果你希望先看一眼脚本内容再执行:
 
 ```bash
 git clone https://github.com/roseduan/better-phrase.git ~/.claude/skills/better-phrase
@@ -92,109 +88,114 @@ cd ~/.claude/skills/better-phrase
 ./install.sh
 ```
 
-What the installer does (either option):
+安装脚本做的事(两种方式一样):
 
-1. Checks `~/.claude/` exists and that `python3` / `git` are installed
-2. Backs up your existing `~/.claude/settings.json` (timestamped backup)
-3. Adds a `UserPromptSubmit` hook entry pointing at `better-phrase.sh`
-4. Cleans up any previous Better Phrase entries from earlier installs
+1. 检查 `~/.claude/` 存在,且 `python3` / `git` 都可用
+2. 备份你现有的 `~/.claude/settings.json`(带时间戳)
+3. 往 `hooks.UserPromptSubmit` 加一条指向 `better-phrase.sh` 的入口
+4. 清理掉之前装过的旧版本 hook 入口(如有)
 
-### Verify it works
+### 验证安装
 
-1. Restart Claude Code (or open a new session) so it picks up the updated settings
-2. Type any English sentence into Claude Code, e.g. `how are you today`
-3. You should see an `✏️ English tip` block appear before the actual answer
+1. **重启 Claude Code**(或开新 session),让它重新加载 settings
+2. 输入任意一句英文,例如 `how are you today`
+3. 应该会在正常回答之前看到 `✦ Better Phrase (1ms)` 提示块
 
-If nothing appears, check that `~/.claude/settings.json` contains an entry under `hooks.UserPromptSubmit` pointing at `better-phrase.sh`.
+如果没出现,检查 `~/.claude/settings.json` 里 `hooks.UserPromptSubmit` 下面是否有指向 `better-phrase.sh` 的入口。
 
-### Uninstall
+### 卸载
 
-One-liner (mirrors the install entry point):
+一键卸载(和安装入口对称):
 
 ```bash
 curl -fsSL https://betterphrase.roseduan.cn/uninstall.sh | bash
 ```
 
-To also delete the cloned source directory:
+如果想顺便把源码目录也删掉:
 
 ```bash
 curl -fsSL https://betterphrase.roseduan.cn/uninstall.sh | bash -s -- --purge
 ```
 
-From a local clone:
+本地仓库目录内:
 
 ```bash
-./uninstall.sh            # remove hook only
-./uninstall.sh --purge    # also delete the source directory (refused when run from inside it)
+./uninstall.sh            # 只移除 hook
+./uninstall.sh --purge    # 同时删除源码目录(在仓库目录里跑会被拒,避免自删)
 ```
 
-The uninstaller backs up `~/.claude/settings.json` (timestamped) before editing, removes the Better Phrase hook entry, and prints exactly what it changed. Without `--purge`, your installed folder stays put.
+卸载脚本会先给 `~/.claude/settings.json` 打时间戳备份,再移除 Better Phrase 的 hook 入口,并清楚地打印改了哪些。不加 `--purge` 时,源码目录保持原样。
 
-## Configuration
+## 配置
 
-There's exactly **one** user-facing toggle: whether Chinese → English translation is on.
+只有**一个**用户开关:中文 → 英文翻译是否开启(默认开)。
 
-English polish is the product's core value — it's always on. To disable everything, run `./uninstall.sh`.
+英文润色是产品核心价值,**始终在线**。如果想全部禁用,跑 `./uninstall.sh`。
 
 ```bash
-# From the repo root:
-PYTHONPATH=. python3 -m better_phrase translate           # show current state
-PYTHONPATH=. python3 -m better_phrase translate off       # disable
-PYTHONPATH=. python3 -m better_phrase translate on        # re-enable
+# 从仓库根目录执行:
+PYTHONPATH=. python3 -m better_phrase translate           # 查看
+PYTHONPATH=. python3 -m better_phrase translate off       # 关闭中文翻译
+PYTHONPATH=. python3 -m better_phrase translate on        # 重新开启
 ```
 
-### Behavior matrix
+### 行为对照表
 
-| Input | `translate=on` (default) | `translate=off` |
-|-------|--------------------------|-----------------|
-| English | ✏️ English tip | ✏️ English tip |
-| Chinese | 🌐 English version | (silent) |
-| Mixed, Chinese-dominant | 🌐 English version | Polish if enough English, else silent |
-| Mixed, English-dominant | ✏️ English tip | ✏️ English tip |
-| Code / commands | (silent) | (silent) |
+| 输入 | `translate=on`(默认) | `translate=off` |
+|------|-----------------------|-----------------|
+| 英文 | ✏️ English tip | ✏️ English tip |
+| 中文 | 🌐 English version | (静默) |
+| 中英混合(中文为主) | 🌐 English version | 有足够英文 → 润色,否则静默 |
+| 中英混合(英文为主) | ✏️ English tip | ✏️ English tip |
+| 代码 / 命令 | (静默) | (静默) |
 
-## Known limitations
+## 已知局限
 
-Better Phrase sees the assembled prompt *after* it leaves your keyboard. **It cannot distinguish what you typed from what you pasted** — Claude Code doesn't pass paste metadata.
+Better Phrase 看到的是 prompt 离开键盘之后的最终文本——Claude Code 不会把粘贴元信息透传过来,所以**无法区分"键入"和"粘贴"**。
 
-To compensate:
+为了缓解:
 
-- **Tail-only heuristic.** When the trailing segment of your input is much shorter than the body (≤ 50 chars vs ≥ 100 chars body), Better Phrase analyzes only that trailing segment. This catches the common "pasted content + short typed question" pattern automatically.
-- **Skip-anything mechanism.** Wrap any content in triple backticks to exclude it from detection entirely:
+- **Tail-only 启发式**:当输入末尾一段明显比正文短时(末尾 ≤ 50 字、正文 ≥ 100 字),Better Phrase 只分析末尾那段。覆盖了"粘贴一大坨 + 自己写一句"的常见 case。
+- **完全跳过机制**:用 ``` ``` 三重反引号包裹的内容,会被**完全剥离**,不进入语言检测:
 
       ```
-      <anything you pasted that you don't want analyzed>
+      <你粘贴的、不想被分析的内容放在这里>
       ```
 
-      your actual question
+      你真正的问题
 
-  Fenced blocks are stripped before any language detection runs.
+  fenced block 在所有 detection 之前就剥掉了。
 
-The combination handles the common cases (~90%). For perfect paste awareness we'd need IDE integration (planned for V1.0).
+两条加起来覆盖大约 90% 的场景。完美的粘贴感知需要 IDE 集成。
 
-## Privacy
+## 隐私
 
-- **100% local execution.** No external API calls, no telemetry, no analytics.
-- Your prompts and corrections never leave your machine.
-- Any future error history will live at `~/.better-phrase/`, owned by you (planned for V0.3).
+- **100% 本地执行**,无外部 API,无遥测,无分析
+- 你的 prompt / 修改建议永不出本机
+- 未来如果加错误档案,会存在 `~/.better-phrase/`,归你所有
 
-## Roadmap
+## 欢迎贡献
 
-- [x] **V0.1** — initial release
-- [x] **V0.2** — Chinese → English translation toggle
-- [ ] **V0.3** — local error history + `better-phrase stats` subcommand
-- [ ] **V0.4** — spaced repetition (SRS) review of past mistakes
-- [ ] **V0.5** — 中式英语 pattern library (specialized 中式英语 detection)
-- [ ] **V1.0** — cross-tool support (Cursor / VS Code / Chrome extension sharing the same error history)
+这个项目还在很早期,功能刻意做得很克制 —— 当前只有"英文润色 + 中文翻译"两件事,远谈不上完善。如果你觉得这个方向值得继续,欢迎一起来玩:
+
+- **报 bug / 提想法** — 直接开 [Issue](https://github.com/roseduan/better-phrase/issues)。中式英语模式、新的检测规则、UI 调整、文案打磨…… 都可以聊。
+- **提 PR** — fork、改、PR。比较容易上手的方向:
+  - 在 `better_phrase/detector.py` 里调语言检测启发式
+  - 在 `better_phrase/prompts.py` 里改 tip / 翻译模板
+  - 给 `tests/` 加更多 case
+  - 完善文档(README、SKILL.md、网站)
+- **分享给身边人** — 觉得有用就推一下给同事/朋友,反馈越多越好。
+
+整个代码量目前还很小(100 多行 Python),任何一个 PR 都能产生看得见的影响。
 
 ## License
 
-Apache License 2.0 — see [LICENSE](LICENSE).
+Apache License 2.0 — 详见 [LICENSE](LICENSE)。
 
 ---
 
 <div align="center">
 
-**Star ⭐ if Better Phrase helped you write better English in Claude Code.**
+**如果 Better Phrase 帮你写出更地道的英文,欢迎给个 Star ⭐。**
 
 </div>

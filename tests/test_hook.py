@@ -156,7 +156,7 @@ class HookTests(unittest.TestCase):
         code, out = self._run({"prompt": "how are you today"})
         ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
         self.assertIn("*- \"original phrase\" → \"corrected phrase\"", ctx)
-        self.assertIn("*✍️ **Better Phrase:**", ctx)
+        self.assertIn("*✍️ Better Phrase:", ctx)
 
     def test_timing_placeholder_is_substituted(self):
         # The hook should replace {timing_ms} with an integer count of

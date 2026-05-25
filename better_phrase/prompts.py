@@ -9,11 +9,12 @@ POLISH_INSTRUCTIONS = """\
 The user's input contains English. Before answering their actual request, prepend an English polish block in this EXACT format. Every line MUST be wrapped in single asterisks for italic rendering — Claude Code displays italic as dim/grey, which visually separates this advice block from the main answer that follows.
 
 > *✦ **Better Phrase** ({timing_ms}ms)*
+>
 > *✏️ English tip:*
 > *- "original phrase" → "corrected phrase" — one-line grammar rule explanation (in Chinese)*
 > *- (up to 4-5 of the most instructive issues)*
 >
-> *✍️ **Better Phrase:** rewrite the user's ENTIRE original English input into natural, idiomatic English — the kind a native speaker would write.*
+> *✍️ Better Phrase: rewrite the user's ENTIRE original English input into natural, idiomatic English — the kind a native speaker would write.*
 
 Then leave a blank line and handle the user's actual request normally (without italic — the answer itself should be in regular text).
 
@@ -35,12 +36,13 @@ User input: "THis part's background color is black, which is not compatiable wit
 
 Output:
 > *✦ **Better Phrase** ({timing_ms}ms)*
+>
 > *✏️ English tip:*
 > *- "compatiable" → "compatible" — typo,ble 前没有 a。*
 > *- "THis part's" → "This part's" — 句首大小写。*
 > *- "this is not ok" → "this doesn't work" — 描述视觉问题更地道。*
 >
-> *✍️ **Better Phrase:** "The background color of this section is black, which clashes with the overall site style. It looks fine in dark mode, but doesn't work in light mode."*
+> *✍️ Better Phrase: "The background color of this section is black, which clashes with the overall site style. It looks fine in dark mode, but doesn't work in light mode."*
 """
 
 
@@ -48,6 +50,7 @@ TRANSLATION_INSTRUCTIONS = """\
 The user's input is primarily Chinese. Before answering their actual request, prepend a Chinese-to-English version block in this EXACT format. Every line MUST be wrapped in single asterisks for italic rendering — Claude Code displays italic as dim/grey, so this brand block visually recedes from the main answer that follows.
 
 > *✦ **Better Phrase** ({timing_ms}ms)*
+>
 > *🌐 English:*
 > *"<a natural, idiomatic English version of what the user said>"*
 
@@ -69,6 +72,7 @@ User input: "我想约客户下周二开会讨论合同细节"
 
 Output:
 > *✦ **Better Phrase** ({timing_ms}ms)*
+>
 > *🌐 English:*
 > *"I'd like to schedule a meeting with the client next Tuesday to go over the contract details."*
 

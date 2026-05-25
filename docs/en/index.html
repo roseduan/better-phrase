@@ -35,68 +35,64 @@
 </script>
 <style>
   body { font-feature-settings: 'cv11', 'ss01'; }
-  .grid-bg {
-    background-image:
-      linear-gradient(to right, rgba(99,102,241,0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(99,102,241,0.06) 1px, transparent 1px);
-    background-size: 32px 32px;
-  }
-  @media (prefers-color-scheme: dark) {
-    .grid-bg {
-      background-image:
-        linear-gradient(to right, rgba(129,140,248,0.08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(129,140,248,0.08) 1px, transparent 1px);
-    }
-  }
 </style>
 </head>
 <body class="font-sans bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
 
+<!-- Header -->
 <header class="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border-b border-slate-200/60 dark:border-slate-800/60">
-  <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-    <a href="#top" class="flex items-center gap-2 font-bold">
-      <span class="text-brand-600 dark:text-brand-400"><svg width="22" height="22" viewBox="0 0 64 64" fill="currentColor"><mask id="h-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#h-c)"/></svg></span>
-      <span>Better Phrase</span>
-    </a>
-    <nav class="flex items-center gap-5 text-sm">
-      <a href="#demo" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">Demo</a>
-      <a href="#vs" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">vs CLAUDE.md</a>
-      <a href="#install" class="hidden sm:inline text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">Install</a>
-      <a href="/" class="text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">中文</a>
-      <a href="https://github.com/roseduan/better-phrase" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 text-white text-xs font-medium hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-6">
+      <a href="#top" class="flex items-center gap-2 text-slate-900 dark:text-slate-50 font-bold">
+        <svg width="20" height="20" viewBox="0 0 64 64" fill="currentColor" aria-label="Better Phrase logo"><mask id="nav-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#nav-c)"/></svg>
+        <span class="text-base">Better Phrase</span>
+      </a>
+      <nav class="hidden sm:flex items-center gap-6 text-base">
+        <a href="#demo" class="text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">Demo</a>
+        <a href="#features" class="text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">Features</a>
+        <a href="#install" class="text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400">Install</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800" aria-label="切换到中文">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        中
+      </a>
+      <a href="https://github.com/roseduan/better-phrase" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.78 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.73.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
         GitHub
       </a>
-    </nav>
+    </div>
   </div>
 </header>
 
-<section id="top" class="relative grid-bg">
+<!-- Hero -->
+<section id="top" class="relative">
   <div class="max-w-6xl mx-auto px-6 pt-20 pb-24 sm:pt-28 sm:pb-32 text-center">
+    <div class="flex items-center justify-center gap-4 mb-8">
+      <span class="text-slate-900 dark:text-slate-50"><svg width="72" height="72" viewBox="0 0 64 64" fill="currentColor" aria-label="Better Phrase logo"><mask id="hero-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#hero-c)"/></svg></span>
+      <span class="text-4xl sm:text-5xl font-extrabold tracking-tight">Better Phrase</span>
+    </div>
     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-200 text-xs font-medium mb-6">
       <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
       100% local · zero API calls · zero telemetry
     </div>
-    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight">
-      English polish, baked into<br class="hidden sm:block">
-      <span class="text-brand-600 dark:text-brand-400">Claude Code</span><span class="relative inline-block">.</span>
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+      English <span class="relative inline-block"><span class="relative z-10">polish</span><span class="absolute inset-x-0 bottom-1 h-3 bg-brand-200 dark:bg-brand-700/40 -z-0"></span></span>, baked into<br class="hidden sm:block">
+      <span class="text-brand-600 dark:text-brand-400">Claude Code</span>.
     </h1>
     <p class="mt-6 text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-      Catches grammar and idiom issues in your English. Gives idiomatic English when you write Chinese.<br>
-      For code, commands, and everything else — <span class="font-semibold text-slate-900 dark:text-slate-100">silent</span>.
+      Catches grammar, word choice, and idiom issues when you write English. Drops a native-style English rewrite when you write Chinese.<br>
+      Code, commands, anything else — <span class="font-semibold text-slate-900 dark:text-slate-100">completely silent</span>.
     </p>
 
-    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+    <div class="mt-10 flex items-center justify-center">
       <div class="group relative font-mono text-sm bg-slate-900 dark:bg-slate-800 text-slate-100 rounded-lg px-5 py-3 pr-14 shadow-lg shadow-brand-600/10 border border-slate-800 dark:border-slate-700 w-full sm:w-auto overflow-x-auto">
         <span class="text-brand-400 select-none">$ </span><span id="install-cmd">curl -fsSL https://betterphrase.roseduan.cn/install.sh | bash</span>
         <button onclick="copyInstall(this)" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition" aria-label="Copy">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
       </div>
-      <a href="https://github.com/roseduan/better-phrase" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-300 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800">
-        View on GitHub
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
-      </a>
     </div>
     <p class="mt-4 text-xs text-slate-500 dark:text-slate-400">
       Requires Python 3.9+ · Claude Code installed · one command registers the hook
@@ -104,57 +100,69 @@
   </div>
 </section>
 
+<!-- Demo -->
 <section id="demo" class="py-20 sm:py-24">
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-14">
-      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">Demo</p>
+      <p class="text-brand-600 dark:text-brand-400 text-base sm:text-lg font-semibold tracking-wide uppercase">Demo</p>
       <h2 class="mt-2 text-3xl sm:text-4xl font-bold">What it looks like in Claude Code</h2>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
-        <div class="flex items-center gap-2 mb-4 text-xs font-mono text-slate-500 dark:text-slate-400">
+    <div class="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
+      <!-- English tip -->
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm overflow-hidden">
+        <div class="flex items-center gap-2 px-6 py-4 border-b border-slate-800 text-sm font-mono text-slate-400">
           <span class="w-2 h-2 rounded-full bg-rose-400"></span>
           <span class="w-2 h-2 rounded-full bg-amber-400"></span>
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
           <span class="ml-2">writing English</span>
         </div>
-        <div class="font-mono text-xs text-slate-500 dark:text-slate-400 mb-2"># you type:</div>
-        <div class="font-mono text-sm bg-slate-50 dark:bg-slate-800 rounded-md px-3 py-2 mb-4">how are you todya, tell me a joke</div>
-        <div class="border-l-2 border-brand-400 pl-4 space-y-2 text-sm text-slate-600 dark:text-slate-400 italic">
-          <p>✦ <b>Better Phrase</b> · English tip</p>
-          <p>· "todya" → "today" — typo, letters out of order.</p>
-          <p>· comma splice — two independent clauses need a period.</p>
-          <p>✍️ <b>Better phrase:</b> "Hey, how's it going today? Also, tell me a joke."</p>
+        <div class="px-7 py-7 font-mono text-base leading-relaxed text-slate-300">
+          <div class="text-slate-400">&gt; how are you todya, tell me a joke</div>
+          <div class="mt-3 border-l-2 border-slate-600 pl-4 italic text-slate-400 space-y-3">
+            <p>✦ <b class="text-slate-200 not-italic">Better Phrase</b> (1ms)</p>
+            <div class="space-y-1">
+              <p>✏️ English tip:</p>
+              <p>· "todya" → "today" — typo, letters out of order.</p>
+              <p>· comma splice — two independent clauses need a period.</p>
+            </div>
+            <p>✍️ Better Phrase: "Hey, how's it going today? Also, tell me a joke."</p>
+          </div>
         </div>
       </div>
-      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
-        <div class="flex items-center gap-2 mb-4 text-xs font-mono text-slate-500 dark:text-slate-400">
+      <!-- Chinese translate -->
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm overflow-hidden">
+        <div class="flex items-center gap-2 px-6 py-4 border-b border-slate-800 text-sm font-mono text-slate-400">
           <span class="w-2 h-2 rounded-full bg-rose-400"></span>
           <span class="w-2 h-2 rounded-full bg-amber-400"></span>
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
           <span class="ml-2">writing Chinese</span>
         </div>
-        <div class="font-mono text-xs text-slate-500 dark:text-slate-400 mb-2"># you type:</div>
-        <div class="font-mono text-sm bg-slate-50 dark:bg-slate-800 rounded-md px-3 py-2 mb-4">我想约客户下周二开会讨论合同细节</div>
-        <div class="border-l-2 border-brand-400 pl-4 space-y-2 text-sm text-slate-600 dark:text-slate-400 italic">
-          <p>✦ <b>Better Phrase</b> · English</p>
-          <p>"I'd like to schedule a meeting with the client next Tuesday to go over the contract details."</p>
+        <div class="px-7 py-7 font-mono text-base leading-relaxed text-slate-300">
+          <div class="text-slate-400">&gt; 我想约客户下周二开会讨论合同细节</div>
+          <div class="mt-3 border-l-2 border-slate-600 pl-4 italic text-slate-400 space-y-3">
+            <p>✦ <b class="text-slate-200 not-italic">Better Phrase</b> (1ms)</p>
+            <div class="space-y-1">
+              <p>🌐 English:</p>
+              <p>"I'd like to schedule a meeting with the client next Tuesday to go over the contract details."</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <p class="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-      Code, commands, or Chinese without translation needed — <b class="text-slate-900 dark:text-slate-100">nothing</b>. Zero tokens, zero noise.
+      Code, commands, or Chinese that doesn't need translation — <b class="text-slate-900 dark:text-slate-100">completely silent</b>. Zero tokens, zero noise.
     </p>
   </div>
 </section>
 
-<section id="vs" class="py-20 sm:py-24 bg-slate-50 dark:bg-slate-900/40">
-  <div class="max-w-6xl mx-auto px-6">
+<!-- Why hook, not skill -->
+<section id="vs" class="py-20 sm:py-24">
+  <div class="max-w-4xl mx-auto px-6">
     <div class="text-center mb-14">
-      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">Why not CLAUDE.md</p>
-      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">Boolean decisions belong in code, not the LLM</h2>
+      <p class="text-brand-600 dark:text-brand-400 text-base sm:text-lg font-semibold tracking-wide uppercase">Why not a skill</p>
+      <h2 class="mt-2 text-3xl sm:text-4xl font-bold">Language detection belongs in code · not the LLM</h2>
       <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-        "Polish my English" as a CLAUDE.md rule looks the same, but charges you on every single prompt.
+        "Is this prompt English?" is a yes/no question. Asking the LLM to re-decide on every message looks equivalent, but the token cost and trigger reliability are not the same.
       </p>
     </div>
     <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -162,39 +170,45 @@
         <thead class="bg-slate-50 dark:bg-slate-800/60">
           <tr class="text-left">
             <th class="px-6 py-4 font-semibold"></th>
-            <th class="px-6 py-4 font-semibold text-slate-500">Rules in CLAUDE.md</th>
-            <th class="px-6 py-4 font-semibold text-brand-600 dark:text-brand-400">Better Phrase</th>
+            <th class="px-6 py-4 font-semibold text-slate-500">If it were a skill (LLM decides when to invoke)</th>
+            <th class="px-6 py-4 font-semibold text-brand-600 dark:text-brand-400">Better Phrase (hook + code filter)</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
           <tr>
+            <td class="px-6 py-4 font-medium">Trigger decision</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">LLM has to judge every prompt to decide if it should invoke</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">Python regex, <b>deterministic</b>, zero model cost</td>
+          </tr>
+          <tr>
             <td class="px-6 py-4 font-medium">Token cost</td>
-            <td class="px-6 py-4 text-slate-600 dark:text-slate-400"><b>Every</b> prompt loads ~400 tokens of rules</td>
-            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">Only when <b>actually triggered</b></td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">Skill description stays in context, <b>loaded every message</b></td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">Instructions injected only when <b>English is detected</b></td>
           </tr>
           <tr>
             <td class="px-6 py-4 font-medium">Trigger reliability</td>
-            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">LLM judges (might forget or false-positive)</td>
-            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">Deterministic, 100% consistent</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">Model may skip invocations or mistime them</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300">100% consistent — no reliance on model memory</td>
           </tr>
           <tr>
-            <td class="px-6 py-4 font-medium">Pure Chinese / code prompts</td>
-            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">Still cost tokens</td>
-            <td class="px-6 py-4 text-slate-700 dark:text-slate-300"><b>Zero</b> cost, completely silent</td>
+            <td class="px-6 py-4 font-medium">Non-English prompts</td>
+            <td class="px-6 py-4 text-slate-600 dark:text-slate-400">Even when not invoked, the description still costs tokens</td>
+            <td class="px-6 py-4 text-slate-700 dark:text-slate-300"><b>Zero tokens</b> — hook exits immediately</td>
           </tr>
         </tbody>
       </table>
     </div>
     <p class="mt-6 text-center text-base text-slate-700 dark:text-slate-300">
-      <b class="text-brand-600 dark:text-brand-400">5–10×</b> less token spend over a working day, with more reliable triggering.
+      Skills shine for "should the AI use tool X?" — judgment calls. Language detection is a <b class="text-brand-600 dark:text-brand-400">yes/no question</b>; cheaper and more reliable in code.
     </p>
   </div>
 </section>
 
-<section class="py-20 sm:py-24">
+<!-- Features -->
+<section id="features" class="py-20 sm:py-24">
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-14">
-      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">Features</p>
+      <p class="text-brand-600 dark:text-brand-400 text-base sm:text-lg font-semibold tracking-wide uppercase">Features</p>
       <h2 class="mt-2 text-3xl sm:text-4xl font-bold">Small, focused, does one thing well</h2>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -206,36 +220,37 @@
       <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
         <div class="text-2xl mb-3">🌐</div>
         <h3 class="font-semibold mb-1">Chinese → English</h3>
-        <p class="text-sm text-slate-600 dark:text-slate-400">Idiomatic English version of what you said. Toggleable.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Drops an idiomatic English version when you write Chinese. Toggleable.</p>
       </div>
       <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
         <div class="text-2xl mb-3">🎯</div>
         <h3 class="font-semibold mb-1">Zero noise</h3>
-        <p class="text-sm text-slate-600 dark:text-slate-400">Code, commands, and irrelevant inputs trigger nothing.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Code, commands, and irrelevant inputs trigger nothing. No tokens wasted.</p>
       </div>
       <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
         <div class="text-2xl mb-3">🇨🇳</div>
         <h3 class="font-semibold mb-1">Chinese explanations</h3>
-        <p class="text-sm text-slate-600 dark:text-slate-400">Tips explained in Chinese, focused on 中式英语 patterns.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Tips explained in Chinese, focused on common Chinglish (中式英语) patterns.</p>
       </div>
       <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
         <div class="text-2xl mb-3">🚀</div>
         <h3 class="font-semibold mb-1">Imperceptible overhead</h3>
-        <p class="text-sm text-slate-600 dark:text-slate-400">The hook is faster than Claude's own response latency.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">The hook just runs language detection — invisible against Claude's own latency.</p>
       </div>
       <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 transition">
         <div class="text-2xl mb-3">🔒</div>
         <h3 class="font-semibold mb-1">100% local</h3>
-        <p class="text-sm text-slate-600 dark:text-slate-400">No API calls, no telemetry, no data leaves your machine.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">No API calls, no telemetry. Data never leaves your machine.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="install" class="py-20 sm:py-24 bg-slate-50 dark:bg-slate-900/40">
+<!-- Install -->
+<section id="install" class="py-20 sm:py-24">
   <div class="max-w-4xl mx-auto px-6">
     <div class="text-center mb-12">
-      <p class="text-brand-600 dark:text-brand-400 text-sm font-semibold tracking-wide uppercase">Install</p>
+      <p class="text-brand-600 dark:text-brand-400 text-base sm:text-lg font-semibold tracking-wide uppercase">Install</p>
       <h2 class="mt-2 text-3xl sm:text-4xl font-bold">Set up in 30 seconds</h2>
     </div>
     <div class="space-y-6">
@@ -255,7 +270,7 @@
           <li>Verifies <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">~/.claude/</code> exists and <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">python3</code> / <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">git</code> are available</li>
           <li>Timestamps a backup of your existing <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">~/.claude/settings.json</code></li>
           <li>Adds an entry to <code class="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">hooks.UserPromptSubmit</code></li>
-          <li>Cleans up any older Better Phrase hook entries</li>
+          <li>Cleans up any older Better Phrase entries</li>
         </ol>
       </div>
       <div class="text-sm text-slate-600 dark:text-slate-400">
@@ -265,10 +280,11 @@
   </div>
 </section>
 
+<!-- Footer -->
 <footer class="border-t border-slate-200 dark:border-slate-800 py-10">
   <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
     <div class="flex items-center gap-2">
-      <span class="text-brand-600 dark:text-brand-400"><svg width="16" height="16" viewBox="0 0 64 64" fill="currentColor"><mask id="f-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#f-c)"/></svg></span>
+      <span class="text-slate-900 dark:text-slate-50"><svg width="16" height="16" viewBox="0 0 64 64" fill="currentColor"><mask id="f-c"><rect width="64" height="64" fill="white"/><path d="M19 26.5 L28 35.5 L46 17.5" stroke="black" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M14 6 C9 6, 6 10, 6 15 L6 39 C6 44, 9 48, 14 48 L22 48 L17 58 Q17 59, 18.2 58.3 L33 48 L50 48 C55 48, 58 44, 58 39 L58 15 C58 10, 55 6, 50 6 Z" mask="url(#f-c)"/></svg></span>
       <span>Better Phrase · Apache 2.0</span>
     </div>
     <div class="flex items-center gap-5">
